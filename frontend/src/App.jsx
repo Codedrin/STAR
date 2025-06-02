@@ -6,16 +6,25 @@ import AdminPro from './views/Dashboard/admin_pro';
 import AdminVer from './views/Dashboard/admin_ver';
 import AdminReport from './views/Dashboard/admin_report';
 import Login from './views/Login';
+import BuyerLogin from './views/Buyer/Buyer_login'; 
+import BuyerRegister from './views/Buyer/Buyer_register'; 
+import BuyerDashboard from './views/Buyer/Buyer_dashboard'; 
+import BuyerDescription  from './views/Buyer/Buyer_Description'; 
+import ReturnItem from './views/Buyer/Return_item'; // adjust path accordingly
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/Buyer_login" element={<BuyerLogin />} />
+        <Route path="/Buyer_register" element={<BuyerRegister />} />
+        <Route path="/Buyer_dashboard" element={<BuyerDashboard />} />
+        <Route path="/Buyer_description" element={<BuyerDescription />} />
+        <Route path="/return-item" element={<ReturnItem />} />
 
-        {/* Dashboard with nested routes */}
+
         <Route path="/dashboard" element={<DashboardLayout />}>
-          {/* This sets admin_dashboard.jsx as the default (index) view */}
           <Route index element={<AdminDashboard />} />
           <Route path="home" element={<AdminDashboard />} />
           <Route path="products" element={<AdminPro />} />
@@ -23,8 +32,21 @@ const App = () => {
           <Route path="reports" element={<AdminReport />} />
         </Route>
       </Routes>
+
     </Router>
   );
 };
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+

@@ -38,10 +38,11 @@ const AdminPro = () => {
           <tbody>
             <tr>
               <td className="px-6 py-6 text-right">
-                <button className="px-6 py-2 text-base rounded-full border border-black hover:bg-red-500 hover:text-white">
-                  Delete
-                </button>
-              </td>
+              <button className="px-6 py-2 text-base rounded-full border border-black bg-white text-black hover:bg-red-500 hover:text-white">
+                Delete
+              </button>
+            </td>
+
             </tr>
           </tbody>
         </table>

@@ -30,19 +30,21 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/Buyer_login" element={<BuyerLogin />} />
+        <Route path="/" element={<BuyerLogin />} />
         <Route path="/Buyer_register" element={<BuyerRegister />} />
         <Route path="/Buyer_dashboard" element={<BuyerDashboard />} />
         <Route path="/Buyer_description" element={<BuyerDescription />} />
         <Route path="/Buyer_forgot" element={<BuyerForgot />} />
         <Route path="/return-item" element={<ReturnItem />} />
 
+<<<<<<< HEAD
 
         <Route path="/Seller_forgotpassword" element={<SellerForgotPassword />} />
+=======
+        {/* Seller */}
+>>>>>>> e1271fcf6a093e294e64e551a48c30115b1e05b4
         <Route path="/Seller_login" element={<SellerLogin />} />
         <Route path="/Seller_register" element={<SellerRegister />} />
-
        <Route path="/Seller_dashboard" element={<SellerDashboard />}>
           <Route index element={<Products />} />
           <Route path="products" element={<Products />} />
@@ -53,7 +55,14 @@ const App = () => {
           <Route path="profile" element={<Profile />} />
         </Route>
 
+<<<<<<< HEAD
         <Route path="/dashboard" element={<DashboardLayout />}>
+=======
+
+        {/* Admin */}
+   <Route path="/Admin_login" element={<Login />} />
+        <Route path="/dashboard" element={<DashboardLayout />}>      
+>>>>>>> e1271fcf6a093e294e64e551a48c30115b1e05b4
           <Route index element={<AdminDashboard />} />
           <Route path="home" element={<AdminDashboard />} />
           <Route path="products" element={<AdminPro />} />

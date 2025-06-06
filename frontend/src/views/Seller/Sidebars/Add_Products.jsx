@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Add_Products = () => {
   const [image, setImage] = useState(null);
@@ -24,8 +26,20 @@ const Add_Products = () => {
     setDescription('');
   };
 
+  const handleAddProduct = () => {
+    toast.success('Product added successfully!', {
+      position: 'top-right',
+      autoClose: 2000,
+    });
+
+    // You can optionally clear fields after add
+    handleCancel();
+  };
+
   return (
     <div className="p-6 max-w-4xl mx-auto bg-white shadow rounded">
+      <ToastContainer /> {/* Toast UI */}
+
       <h2 className="text-2xl font-bold mb-6 text-red-800">Add Product</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -98,7 +112,7 @@ const Add_Products = () => {
       {/* Buttons */}
       <div className="flex justify-end gap-4 mt-6">
         <button
-          onClick={() => alert('Product Added!')}
+          onClick={handleAddProduct}
           className="bg-red-700 text-white px-6 py-2 rounded hover:bg-red-600"
         >
           Add Product

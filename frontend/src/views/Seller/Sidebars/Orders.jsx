@@ -1,5 +1,7 @@
 import React from 'react';
 import { FaBell } from 'react-icons/fa';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const orders = [
   {
@@ -23,8 +25,17 @@ const orders = [
 ];
 
 const Orders = () => {
+  const handleAccept = (productName) => {
+    toast.success(`You accepted the order for "${productName}"`, {
+      position: 'top-right',
+      autoClose: 2000,
+    });
+  };
+
   return (
     <div className="p-6 max-w-4xl mx-auto">
+      <ToastContainer />
+
       {/* Header */}
       <div className="flex justify-between items-center bg-red-700 text-white px-4 py-2 rounded-t">
         <h2 className="text-xl font-semibold">New Orders</h2>
@@ -64,7 +75,10 @@ const Orders = () => {
 
               {/* Buttons */}
               <div className="mt-3 flex gap-3">
-                <button className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700">
+                <button
+                  onClick={() => handleAccept(order.product)}
+                  className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+                >
                   Accept
                 </button>
                 <button className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700">

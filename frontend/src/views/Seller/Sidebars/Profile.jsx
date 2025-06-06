@@ -1,14 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaUserCircle, FaEdit, FaCheck, FaPlus } from 'react-icons/fa';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Profile = () => {
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState('seller@batstate-u.edu.ph');
+  const [editingEmail, setEditingEmail] = useState(false);
+
+  const [password, setPassword] = useState('••••••••');
+  const [editingPassword, setEditingPassword] = useState(false);
+
+  const [mobile, setMobile] = useState('0998******');
+  const [editingMobile, setEditingMobile] = useState(false);
+
+  const [shopName, setShopName] = useState('SPartmart');
+  const [editingShop, setEditingShop] = useState(false);
+
   const handleLogout = () => {
-    // Add your logout logic here
-    alert('You have been logged out.');
+    toast.success('Logged out successfully!', {
+      position: 'top-right',
+      autoClose: 2000,
+      onClose: () => navigate('/Seller_login'),
+    });
+  };
+
+  const showToast = (field) => {
+    toast.success(`${field} updated successfully!`, {
+      position: 'top-right',
+      autoClose: 2000,
+    });
   };
 
   return (
     <div className="max-w-3xl mx-auto p-4 space-y-6">
+      <ToastContainer />
+
       {/* Profile Header */}
       <div className="flex flex-col items-center gap-2 text-center">
         <FaUserCircle className="text-6xl text-gray-500" />
@@ -21,44 +50,140 @@ const Profile = () => {
         <div className="bg-gray-100 rounded p-4 shadow flex justify-between items-center flex-wrap">
           <div>
             <p className="text-xs text-gray-600">Email</p>
-            <p className="font-medium text-sm md:text-base">seller@batstate-u.edu.ph</p>
+            {editingEmail ? (
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="border px-2 py-1 rounded text-sm"
+              />
+            ) : (
+              <p className="font-medium text-sm md:text-base">{email}</p>
+            )}
           </div>
-          <button className="flex items-center text-sm text-red-600 hover:underline">
-            <FaEdit className="mr-1" /> Edit
-          </button>
+          {editingEmail ? (
+            <button
+              className="flex items-center text-sm text-green-700 hover:underline"
+              onClick={() => {
+                setEditingEmail(false);
+                showToast('Email');
+              }}
+            >
+              <FaCheck className="mr-1" /> Save
+            </button>
+          ) : (
+            <button
+              className="flex items-center text-sm text-red-600 hover:underline"
+              onClick={() => setEditingEmail(true)}
+            >
+              <FaEdit className="mr-1" /> Edit
+            </button>
+          )}
         </div>
 
         {/* Password */}
         <div className="bg-gray-100 rounded p-4 shadow flex justify-between items-center flex-wrap">
           <div>
             <p className="text-xs text-gray-600">Password</p>
-            <p className="font-medium text-sm md:text-base">••••••••</p>
+            {editingPassword ? (
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="border px-2 py-1 rounded text-sm"
+              />
+            ) : (
+              <p className="font-medium text-sm md:text-base">{password}</p>
+            )}
           </div>
-          <button className="flex items-center text-sm text-blue-600 hover:underline">
-            Change
-          </button>
+          {editingPassword ? (
+            <button
+              className="flex items-center text-sm text-green-700 hover:underline"
+              onClick={() => {
+                setEditingPassword(false);
+                showToast('Password');
+              }}
+            >
+              <FaCheck className="mr-1" /> Save
+            </button>
+          ) : (
+            <button
+              className="flex items-center text-sm text-blue-600 hover:underline"
+              onClick={() => setEditingPassword(true)}
+            >
+              Change
+            </button>
+          )}
         </div>
 
         {/* Mobile Number */}
         <div className="bg-gray-100 rounded p-4 shadow flex justify-between items-center flex-wrap">
           <div>
             <p className="text-xs text-gray-600">Mobile Number</p>
-            <p className="font-medium text-sm md:text-base">0998******</p>
+            {editingMobile ? (
+              <input
+                type="text"
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
+                className="border px-2 py-1 rounded text-sm"
+              />
+            ) : (
+              <p className="font-medium text-sm md:text-base">{mobile}</p>
+            )}
           </div>
-          <button className="flex items-center text-sm text-green-700 hover:underline">
-            <FaPlus className="mr-1" /> Edit
-          </button>
+          {editingMobile ? (
+            <button
+              className="flex items-center text-sm text-green-700 hover:underline"
+              onClick={() => {
+                setEditingMobile(false);
+                showToast('Mobile number');
+              }}
+            >
+              <FaCheck className="mr-1" /> Save
+            </button>
+          ) : (
+            <button
+              className="flex items-center text-sm text-green-700 hover:underline"
+              onClick={() => setEditingMobile(true)}
+            >
+              <FaPlus className="mr-1" /> Edit
+            </button>
+          )}
         </div>
 
         {/* Shop Name */}
         <div className="bg-gray-100 rounded p-4 shadow flex justify-between items-center flex-wrap">
           <div>
             <p className="text-xs text-gray-600">Shop Name</p>
-            <p className="font-medium text-sm md:text-base">SPartmart</p>
+            {editingShop ? (
+              <input
+                type="text"
+                value={shopName}
+                onChange={(e) => setShopName(e.target.value)}
+                className="border px-2 py-1 rounded text-sm"
+              />
+            ) : (
+              <p className="font-medium text-sm md:text-base">{shopName}</p>
+            )}
           </div>
-          <button className="flex items-center text-sm text-blue-600 hover:underline">
-            Change
-          </button>
+          {editingShop ? (
+            <button
+              className="flex items-center text-sm text-green-700 hover:underline"
+              onClick={() => {
+                setEditingShop(false);
+                showToast('Shop name');
+              }}
+            >
+              <FaCheck className="mr-1" /> Save
+            </button>
+          ) : (
+            <button
+              className="flex items-center text-sm text-blue-600 hover:underline"
+              onClick={() => setEditingShop(true)}
+            >
+              Change
+            </button>
+          )}
         </div>
       </div>
 

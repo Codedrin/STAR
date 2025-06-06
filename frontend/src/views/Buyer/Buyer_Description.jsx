@@ -58,30 +58,34 @@ const Buyer_Description = () => {
             />
           </div>
 
-          <div className="relative">
-            <button
-              onClick={() => setShowCategories(!showCategories)}
-              className="appearance-none flex items-center justify-between rounded-full px-4 py-2 text-sm border border-gray-300 bg-white text-black w-36"
-            >
-              Category
-              <FaChevronDown className="ml-2 text-gray-600 text-sm" />
-            </button>
-
-            {showCategories && (
-              <div className="absolute top-12 left-0 bg-red-600 text-white rounded shadow-md w-48 flex">
-                <div className="flex flex-col items-center bg-red-700 py-2 px-2 gap-4">
+        {/* Category Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowCategories(!showCategories)}
+                    className="appearance-none flex items-center justify-between rounded-full px-4 py-2 text-sm border border-gray-300 bg-white text-black w-36"
+                  >
+                    Category
+                    <FaChevronDown className="ml-2 text-gray-600 text-sm" />
+                  </button>
+      
+                  {showCategories && (
+                    <div className="absolute top-12 left-0 bg-red-600 text-white rounded shadow-md w-48 flex">
+                    <div className="w-full">
                   {categories.map((cat, index) => (
-                    <div key={index} className="text-xl">{cat.icon}</div>
+                    <div
+                      key={index}
+                      onClick={() => alert(`You clicked ${cat.name}`)} // You can replace this with actual logic
+                      className="flex items-center gap-2 px-4 py-2 hover:bg-red-500 cursor-pointer transition rounded"
+                    >
+                      <span className="text-xl">{cat.icon}</span>
+                      <span className="text-sm">{cat.name}</span>
+                    </div>
                   ))}
                 </div>
-                <div className="flex flex-col justify-center py-2 px-3 gap-3 text-sm">
-                  {categories.map((cat, index) => (
-                    <div key={index}>{cat.name}</div>
-                  ))}
+      
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
-          </div>
 
           <FaUserCircle className="text-white text-2xl cursor-pointer" />
         </div>

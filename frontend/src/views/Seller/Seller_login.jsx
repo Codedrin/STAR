@@ -50,9 +50,14 @@ const Seller_login = () => {
             Log in
           </button>
 
-          <p className="text-sm text-center mt-2 text-gray-600 cursor-pointer hover:underline">
+          <p
+            className="text-sm text-center mt-2 text-gray-600 cursor-pointer hover:underline"
+            onClick={() => navigate('/Seller_forgotpassword')}
+          >
             Forgot password?
           </p>
+
+
 
           <p className="text-sm text-center mt-4">
             Don’t have an account?{' '}

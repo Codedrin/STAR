@@ -21,6 +21,10 @@ import Orders from './views/Seller/Sidebars/Orders';
 import Message from './views/Seller/Sidebars/Message';
 import Sales_report from './views/Seller/Sidebars/Sales_report';
 import Profile from './views/Seller/Sidebars/Profile';
+import SellerForgotPassword from './views/Seller/Seller_Forgotpassword'; 
+
+import BuyerForgot from './views/Buyer/Buyer_Forgot'; 
+
 
 const App = () => {
   return (
@@ -31,8 +35,11 @@ const App = () => {
         <Route path="/Buyer_register" element={<BuyerRegister />} />
         <Route path="/Buyer_dashboard" element={<BuyerDashboard />} />
         <Route path="/Buyer_description" element={<BuyerDescription />} />
+        <Route path="/Buyer_forgot" element={<BuyerForgot />} />
         <Route path="/return-item" element={<ReturnItem />} />
 
+
+        <Route path="/Seller_forgotpassword" element={<SellerForgotPassword />} />
         <Route path="/Seller_login" element={<SellerLogin />} />
         <Route path="/Seller_register" element={<SellerRegister />} />
 
@@ -45,9 +52,6 @@ const App = () => {
           <Route path="sales-report" element={<Sales_report />} />
           <Route path="profile" element={<Profile />} />
         </Route>
-
-
-
 
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<AdminDashboard />} />

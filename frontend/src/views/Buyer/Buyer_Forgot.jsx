@@ -1,12 +1,8 @@
 import React from 'react';
-import { FaShoppingCart } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'; // <-- Add this
 import LogoLeft from '../../assets/Logo.png';
 import LogoRight from '../../assets/Logo2.png';
 
-const Buyer_login = () => {
-  const navigate = useNavigate(); // <-- Init navigate
-
+const Buyer_Forgot = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md shadow-lg rounded-lg overflow-hidden">
@@ -27,51 +23,37 @@ const Buyer_login = () => {
 
         {/* Body */}
         <div className="bg-white px-6 py-8">
-          <h2 className="text-lg md:text-xl font-bold text-center mb-6 flex items-center justify-center gap-2">
-            <FaShoppingCart className="text-red-600" />
-            Log in
+          <h2 className="text-lg md:text-xl font-bold text-center mb-6 text-red-600">
+            Reset Buyer Password
           </h2>
 
           <input
-            type="text"
-            placeholder="Enter Username"
+            type="email"
+            placeholder="Enter your email"
             className="w-full mb-4 px-4 py-2 border border-gray-400 rounded focus:outline-none text-sm"
           />
+
           <input
             type="password"
-            placeholder="Enter Password"
+            placeholder="Enter new password"
             className="w-full mb-4 px-4 py-2 border border-gray-400 rounded focus:outline-none text-sm"
+          />
+
+          <input
+            type="password"
+            placeholder="Confirm new password"
+            className="w-full mb-6 px-4 py-2 border border-gray-400 rounded focus:outline-none text-sm"
           />
 
           <button
-            onClick={() => navigate('/Buyer_dashboard')} // ✅ navigate to Buyer_dashboard
-            className="w-32 mx-auto block bg-red-600 text-white py-2 rounded hover:bg-red-700 transition text-sm"
+            className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition text-sm"
           >
-            Log in
+            Change Password
           </button>
-
-
-          <p
-            onClick={() => navigate('/Buyer_forgot')}
-            className="text-sm text-center mt-2 text-gray-600 cursor-pointer hover:underline"
-          >
-            Forgot password?
-          </p>
-
-
-          <p className="text-sm text-center mt-4">
-            Don’t you have an account?{' '}
-            <span
-              className="text-green-600 font-semibold cursor-pointer hover:underline"
-              onClick={() => navigate('/Buyer_register')} // <-- Redirect to Buyer_register
-            >
-              Register now
-            </span>
-          </p>
         </div>
       </div>
     </div>
   );
 };
 
-export default Buyer_login;
+export default Buyer_Forgot;

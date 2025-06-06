@@ -1,24 +1,44 @@
 import React, { useState } from 'react';
 import { FaSearch, FaUserCircle, FaChevronRight, FaChevronLeft } from 'react-icons/fa';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const buyers = Array(10).fill('Buyer Name');
 
 const Message = () => {
   const [selectedBuyer, setSelectedBuyer] = useState('Buyer Name');
   const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([
+    { text: 'Hi, is this available?', from: 'buyer' }
+  ]);
   const [showSidebar, setShowSidebar] = useState(false);
+
+  const handleSend = () => {
+    if (message.trim() === '') return;
+
+    setMessages([...messages, { text: message, from: 'seller' }]);
+
+    toast.success('Message sent!', {
+      position: 'top-right',
+      autoClose: 2000,
+    });
+
+    setMessage('');
+  };
 
   return (
     <div className="relative flex h-[80vh] bg-white shadow rounded overflow-hidden">
+      <ToastContainer />
+
       {/* Sidebar Toggle Button */}
       <button
         onClick={() => setShowSidebar(!showSidebar)}
-       className="absolute top-72 left-0 z-50 bg-red-700 text-white p-2 rounded-r-md shadow-md hover:bg-red-600 md:hidden"
+        className="absolute top-72 left-0 z-50 bg-red-700 text-white p-2 rounded-r-md shadow-md hover:bg-red-600 md:hidden"
       >
         {showSidebar ? <FaChevronLeft /> : <FaChevronRight />}
       </button>
 
-      {/* Sidebar (hidden on mobile if toggled) */}
+      {/* Sidebar */}
       <div
         className={`${
           showSidebar ? 'block' : 'hidden'
@@ -43,7 +63,8 @@ const Message = () => {
               key={index}
               onClick={() => {
                 setSelectedBuyer(name);
-                setShowSidebar(false); // auto-close on mobile
+                setMessages([]); // clear messages on switch
+                setShowSidebar(false);
               }}
               className="flex items-center bg-gray-300 hover:bg-gray-400 px-2 py-2 rounded cursor-pointer"
             >
@@ -61,43 +82,55 @@ const Message = () => {
           {selectedBuyer}
         </div>
 
-        {/* Item Preview & Messages */}
+        {/* Messages */}
         <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+          {/* Preview Card */}
           <div className="border rounded p-4 bg-gray-50 w-fit">
             <div className="w-24 h-24 bg-gray-300 mb-2" />
             <p className="font-semibold text-sm">Item Description</p>
           </div>
 
-          <div className="bg-gray-200 p-2 rounded w-fit text-sm">Hi, is this available?</div>
+          {/* Chat Bubbles */}
+          {messages.map((msg, i) => (
+            <div
+              key={i}
+              className={`p-2 rounded text-sm max-w-[80%] ${
+                msg.from === 'buyer' ? 'bg-gray-200' : 'bg-red-100 self-end'
+              }`}
+            >
+              {msg.text}
+            </div>
+          ))}
         </div>
 
-       {/* Message Input */}
+        {/* Message Input */}
         <div className="p-4 border-t flex items-center gap-2">
-        {/* Attach File Icon */}
-        <label className="cursor-pointer flex items-center">
-            <input type="file" 
-            className="hidden" onChange={(e) => console.log(e.target.files[0])} />
+          <label className="cursor-pointer flex items-center">
+            <input
+              type="file"
+              className="hidden"
+              onChange={(e) => console.log(e.target.files[0])}
+            />
             <div className="text-gray-600 hover:text-red-700 text-xl px-2">
-            📎
+              📎
             </div>
-        </label>
+          </label>
 
-        <input
+          <input
             type="text"
             placeholder="Type a message..."
             className="border rounded px-4 py-2 w-full"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-        />
+          />
 
-        <button
-            onClick={() => alert(`Sent: ${message}`)}
+          <button
+            onClick={handleSend}
             className="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-600"
-        >
+          >
             Send
-        </button>
+          </button>
         </div>
-
       </div>
     </div>
   );

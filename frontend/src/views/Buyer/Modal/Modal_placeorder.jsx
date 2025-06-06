@@ -1,13 +1,28 @@
 import React, { useState } from 'react';
 import { FaUserCircle, FaShoppingBag } from 'react-icons/fa';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import sampleImage from '../../../assets/Logo.png';
-import ModalItemPurchase from './Modal_Item_purchaase'; // ✅ Import the modal
+import ModalItemPurchase from './Modal_Item_purchaase';
 
 const ModalPlaceOrder = ({ onClose }) => {
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
 
+const handlePlaceOrder = () => {
+  toast.success('You have successfully purchased this item.', {
+    position: 'top-right',
+    autoClose: 5000, // display for 5 seconds
+    pauseOnHover: true,
+    closeOnClick: true,
+  });
+  setShowPurchaseModal(true);
+};
+
+
   return (
     <>
+      <ToastContainer />
+
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
         <div className="bg-white rounded-lg w-full max-w-lg p-4 relative">
           <button
@@ -35,9 +50,16 @@ const ModalPlaceOrder = ({ onClose }) => {
               </div>
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-between items-center">
               <button
-                onClick={() => setShowPurchaseModal(true)} // ✅ Show next modal
+                onClick={onClose}
+                className="text-white border border-white px-4 py-2 rounded hover:bg-white hover:text-red-600 transition text-sm"
+              >
+                Back
+              </button>
+
+              <button
+                onClick={handlePlaceOrder}
                 className="flex items-center gap-2 border border-white text-white px-4 py-2 rounded hover:bg-white hover:text-red-600 transition text-sm"
               >
                 <FaShoppingBag />
@@ -48,12 +70,13 @@ const ModalPlaceOrder = ({ onClose }) => {
         </div>
       </div>
 
-      {/* ✅ Show Purchased Confirmation Modal */}
       {showPurchaseModal && (
-        <ModalItemPurchase onClose={() => {
-          setShowPurchaseModal(false);
-          onClose(); // Optional: close both modals
-        }} />
+        <ModalItemPurchase
+          onClose={() => {
+            setShowPurchaseModal(false);
+            onClose();
+          }}
+        />
       )}
     </>
   );

@@ -12,9 +12,8 @@ import BuyerDashboard from './views/Buyer/Buyer_dashboard';
 import BuyerDescription  from './views/Buyer/Buyer_Description'; 
 import ReturnItem from './views/Buyer/Return_item';
 import SellerLogin from './views/Seller/Seller_login'; 
-import SellerRegister from './views/Seller/Seller_register'; 
+import SellerRegister from './views/Seller/Seller_register;' 
 import SellerDashboard from './views/Seller/Seller_dashboard'; 
-
 import Products from './views/Seller/Sidebars/Products';
 import Add_Products from './views/Seller/Sidebars/Add_Products'; 
 import Orders from './views/Seller/Sidebars/Orders';
@@ -34,8 +33,8 @@ const App = () => {
 
         {/* Seller */}
         <Route path="/Seller_login" element={<SellerLogin />} />
-        <Route path="/Seller_register" element={<SellerRegister />} />
-       <Route path="/Seller_dashboard" element={<SellerDashboard />}>
+          <Route path="/Seller_register" element={<SellerRegister />} />
+          <Route path="/Seller_dashboard" element={<SellerDashboard />}>
           <Route index element={<Products />} />
           <Route path="products" element={<Products />} />
           <Route path="add-product" element={<Add_Products />} />
@@ -47,7 +46,7 @@ const App = () => {
 
 
         {/* Admin */}
-   <Route path="/Admin_login" element={<Login />} />
+      <Route path="/Admin_login" element={<Login />} />
         <Route path="/dashboard" element={<DashboardLayout />}>      
           <Route index element={<AdminDashboard />} />
           <Route path="home" element={<AdminDashboard />} />

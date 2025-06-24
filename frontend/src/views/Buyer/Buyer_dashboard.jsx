@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   FaSearch, FaBell, FaUserCircle, FaCommentDots,
@@ -7,7 +7,7 @@ import {
 } from 'react-icons/fa';
 import LogoLeft from '../../assets/Logo.png';
 import LogoRight from '../../assets/Logo2.png';
-import ModalChat from './Modal/Modal_chat'; // Adjust the path as needed
+import ModalChat from './Modal/Modal_chat'; 
 
 
 
@@ -15,6 +15,23 @@ const Buyer_dashboard = () => {
   const [showCategories, setShowCategories] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [profile, setProfile] = useState(null);
+
+  const userId = localStorage.getItem('userId');
+
+  useEffect(() => {
+    if (userId) {
+      fetch(`http://localhost:5000/userAuth/buyerProfile/${userId}`)
+        .then(res => res.json())
+        .then(data => setProfile(data));
+    }
+  }, [userId]);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
+  };
 
   const categories = [
     { name: 'Engineering', icon: <FaGraduationCap /> },
@@ -65,21 +82,48 @@ const Buyer_dashboard = () => {
 
             {showCategories && (
               <div className="absolute top-12 left-0 bg-red-600 text-white rounded shadow-md w-48 flex">
-                <div className="flex flex-col items-center bg-red-700 py-2 px-2 gap-4">
-                  {categories.map((cat, index) => (
-                    <div key={index} className="text-xl">{cat.icon}</div>
-                  ))}
-                </div>
-                <div className="flex flex-col justify-center py-2 px-3 gap-3 text-sm">
-                  {categories.map((cat, index) => (
-                    <div key={index}>{cat.name}</div>
-                  ))}
+              <div className="w-full">
+            {categories.map((cat, index) => (
+              <div
+                key={index}
+                onClick={() => alert(`You clicked ${cat.name}`)} 
+                className="flex items-center gap-2 px-4 py-2 hover:bg-red-500 cursor-pointer transition rounded"
+              >
+                <span className="text-xl">{cat.icon}</span>
+                <span className="text-sm">{cat.name}</span>
+              </div>
+            ))}
+          </div>
+
+              </div>
+            )}
+          </div>
+           <div className="relative flex items-center gap-2">
+            <FaUserCircle
+              className="text-white text-2xl cursor-pointer"
+              onClick={() => setShowUserMenu(!showUserMenu)}
+            />
+            {profile && (
+              <span className="ml-2 text-white font-semibold text-base">
+                {profile.fullname}
+              </span>
+            )}
+            {/* Popup menu */}
+            {showUserMenu && (
+              <div className="absolute right-0 top-12 bg-white text-black rounded shadow-md w-56 z-20">
+                <div className="p-4">
+                  <div className="font-semibold text-lg">{profile?.fullname}</div>
+                  <div className="text-sm text-gray-600">{profile?.email}</div>
+                  <button
+                    onClick={handleLogout}
+                    className="mt-4 w-full bg-red-600 text-white rounded py-2 hover:bg-red-700 transition"
+                  >
+                    Logout
+                  </button>
                 </div>
               </div>
             )}
           </div>
-
-          <FaUserCircle className="text-white text-2xl cursor-pointer" />
         </div>
       </div>
 

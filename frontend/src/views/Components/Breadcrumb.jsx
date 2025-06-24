@@ -13,7 +13,6 @@ const Breadcrumb = () => {
   const location = useLocation();
   const pathParts = location.pathname.split('/').filter(Boolean); // removes empty strings
 
-  // If user is at /dashboard or /dashboard/home, don't render anything
   if (pathParts.length <= 1 || pathParts[1] === 'home') {
     return null;
   }

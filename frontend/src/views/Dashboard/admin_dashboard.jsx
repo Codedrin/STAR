@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import { FaUserCircle } from 'react-icons/fa';
 
 ChartJS.register(
   CategoryScale,
@@ -22,6 +23,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
 
 const AdminDashboard = () => {
   const lineData = {
@@ -80,40 +82,42 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      {/* Info Boxes */}
-<div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-  <div className="bg-white rounded-lg shadow p-6 text-center border border-black h-40 flex flex-col justify-center">
-    <h2 className="text-gray-700 text-lg font-semibold mb-2">User Registered</h2>
-    <p className="text-3xl font-bold text-gray-800">543</p>
-  </div>
-  <div className="bg-white rounded-lg shadow p-6 text-center border border-black h-40 flex flex-col justify-center">
-    <h2 className="text-gray-700 text-lg font-semibold mb-2">Pending Verification</h2>
-    <p className="text-3xl font-bold text-gray-800">13</p>
-  </div>
-  <div className="bg-white rounded-lg shadow p-6 text-center border border-black h-40 flex flex-col justify-center">
-    <h2 className="text-gray-700 text-lg font-semibold mb-2">Reports</h2>
-    <p className="text-3xl font-bold text-gray-800">4</p>
-  </div>
-</div>
+    <div className="p-0 bg-gray-100 min-h-screen">
 
-{/* Charts */}
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-  <div className="bg-white rounded-lg shadow p-6 overflow-x-auto">
-    <h3 className="text-lg font-semibold text-gray-700 mb-4">Monthly Report</h3>
-    <div className="min-w-[500px]">
-      <Line data={lineData} />
-    </div>
-  </div>
-  <div className="bg-white rounded-lg shadow p-6 overflow-x-auto">
-    <h3 className="text-lg font-semibold text-gray-700 mb-4">Stats</h3>
-    <div className="min-w-[500px]">
-      <Bar data={barData} />
-    </div>
-  </div>
-</div>
+      {/* Dashboard Content */}
+      <div className="p-6">
+        {/* Info Boxes */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div className="bg-white rounded-lg shadow p-6 text-center border border-black h-40 flex flex-col justify-center">
+            <h2 className="text-gray-700 text-lg font-semibold mb-2">User Registered</h2>
+            <p className="text-3xl font-bold text-gray-800">543</p>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6 text-center border border-black h-40 flex flex-col justify-center">
+            <h2 className="text-gray-700 text-lg font-semibold mb-2">Pending Verification</h2>
+            <p className="text-3xl font-bold text-gray-800">13</p>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6 text-center border border-black h-40 flex flex-col justify-center">
+            <h2 className="text-gray-700 text-lg font-semibold mb-2">Reports</h2>
+            <p className="text-3xl font-bold text-gray-800">4</p>
+          </div>
+        </div>
 
-
+        {/* Charts */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg shadow p-6 overflow-x-auto">
+            <h3 className="text-lg font-semibold text-gray-700 mb-4">Monthly Report</h3>
+            <div className="min-w-[500px]">
+              <Line data={lineData} />
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6 overflow-x-auto">
+            <h3 className="text-lg font-semibold text-gray-700 mb-4">Stats</h3>
+            <div className="min-w-[500px]">
+              <Bar data={barData} />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

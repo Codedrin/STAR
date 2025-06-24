@@ -1,11 +1,40 @@
-import React from 'react';
-import { FaStore } from 'react-icons/fa'; // <-- changed icon here
+import React, { useState } from 'react';
+import { FaStore } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import LogoLeft from '../../assets/Logo.png';
 import LogoRight from '../../assets/Logo2.png';
 
 const Seller_login = () => {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:5000/userAuth/loginSeller', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Login failed');
+
+      // Save userId to localStorage
+      localStorage.setItem('userId', data.user.id);
+
+      // Navigate to dashboard
+      navigate('/Seller_dashboard');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -28,29 +57,42 @@ const Seller_login = () => {
         {/* Body */}
         <div className="bg-white px-6 py-8">
           <h2 className="text-lg md:text-xl font-bold text-center mb-6 flex items-center justify-center gap-2">
-            <FaStore className="text-red-600" /> {/* <-- updated icon here */}
+            <FaStore className="text-red-600" />
             Seller Log in
           </h2>
 
           <input
             type="text"
-            placeholder="Enter Username"
+            placeholder="Enter Email"
             className="w-full mb-4 px-4 py-2 border border-gray-400 rounded focus:outline-none text-sm"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            disabled={loading}
           />
           <input
             type="password"
             placeholder="Enter Password"
             className="w-full mb-4 px-4 py-2 border border-gray-400 rounded focus:outline-none text-sm"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            disabled={loading}
           />
 
+          {/* Error message */}
+          {error && <div className="text-red-600 text-sm mb-4 text-center">{error}</div>}
+
           <button
-            onClick={() => navigate('/Seller_dashboard')}
+            onClick={handleLogin}
             className="w-32 mx-auto block bg-red-600 text-white py-2 rounded hover:bg-red-700 transition text-sm"
+            disabled={loading}
           >
-            Log in
+            {loading ? "Logging in..." : "Log in"}
           </button>
 
-          <p className="text-sm text-center mt-2 text-gray-600 cursor-pointer hover:underline">
+          <p
+            className="text-sm text-center mt-2 text-gray-600 cursor-pointer hover:underline"
+            onClick={() => navigate('/Seller_forgotpassword')}
+          >
             Forgot password?
           </p>
 
@@ -62,7 +104,6 @@ const Seller_login = () => {
             >
               Register now
             </span>
-
           </p>
         </div>
       </div>

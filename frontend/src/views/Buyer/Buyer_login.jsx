@@ -1,11 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'; // <-- Add this
+import { useNavigate } from 'react-router-dom'; 
 import LogoLeft from '../../assets/Logo.png';
 import LogoRight from '../../assets/Logo2.png';
 
 const Buyer_login = () => {
-  const navigate = useNavigate(); // <-- Init navigate
+  const navigate = useNavigate(); 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:5000/userAuth/loginBuyer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Login failed');
+      localStorage.setItem('userId', data.user.id);
+      navigate('/Buyer_dashboard');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -34,24 +58,38 @@ const Buyer_login = () => {
 
           <input
             type="text"
-            placeholder="Enter Username"
+            placeholder="Enter Email"
             className="w-full mb-4 px-4 py-2 border border-gray-400 rounded focus:outline-none text-sm"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            disabled={loading}
           />
           <input
             type="password"
             placeholder="Enter Password"
             className="w-full mb-4 px-4 py-2 border border-gray-400 rounded focus:outline-none text-sm"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            disabled={loading}
           />
 
+          {/* Show error message */}
+          {error && (
+            <div className="text-red-600 text-sm mb-4 text-center">{error}</div>
+          )}
+
           <button
-            onClick={() => navigate('/Buyer_dashboard')} // ✅ navigate to Buyer_dashboard
+            onClick={handleLogin}
             className="w-32 mx-auto block bg-red-600 text-white py-2 rounded hover:bg-red-700 transition text-sm"
+            disabled={loading}
           >
-            Log in
+            {loading ? "Logging in..." : "Log in"}
           </button>
 
-
-          <p className="text-sm text-center mt-2 text-gray-600 cursor-pointer hover:underline">
+          <p
+            onClick={() => navigate('/Buyer_forgot')}
+            className="text-sm text-center mt-2 text-gray-600 cursor-pointer hover:underline"
+          >
             Forgot password?
           </p>
 
@@ -59,7 +97,7 @@ const Buyer_login = () => {
             Don’t you have an account?{' '}
             <span
               className="text-green-600 font-semibold cursor-pointer hover:underline"
-              onClick={() => navigate('/Buyer_register')} // <-- Redirect to Buyer_register
+              onClick={() => navigate('/Buyer_register')}
             >
               Register now
             </span>

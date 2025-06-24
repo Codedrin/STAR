@@ -7,10 +7,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependency directories
 node_modules
+
+# Build output
 dist
 dist-ssr
 *.local
+
+# Firebase service account key
+backend/services/serviceAccountKey.json
 
 # Editor directories and files
 .vscode/*

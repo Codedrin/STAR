@@ -32,7 +32,12 @@ const Buyer_register = () => {
       setError('Please fill out all fields.');
       return;
     }
-    if (!profileFile || !idFile) {
+      if (!/^\d+@g\.batstate-u\.edu\.ph$/.test(email)) {
+    setError('Email must contain only numbers followed by @g.batstate-u.edu.ph');
+    return;
+      }
+
+    if (!profileFile || !idFile) {  
       setError('Please upload both profile and ID.');
       return;
     }
@@ -58,7 +63,7 @@ const Buyer_register = () => {
         throw new Error(data.error || 'Registration failed');
       }
 
-      navigate('/Buyer_login');
+      navigate('/');
     } catch (err) {
       setError(err.message);
     } finally {

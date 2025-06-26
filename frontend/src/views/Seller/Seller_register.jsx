@@ -31,6 +31,11 @@ const Seller_register = () => {
       setError('Please fill out all fields.');
       return;
     }
+      if (!/^\d+@g\.batstate-u\.edu\.ph$/.test(email)) {
+    setError('Email must contain only numbers followed by @g.batstate-u.edu.ph');
+    return;
+      }
+      
     if (!profileFile || !idFile) {
       setError('Please upload both profile and valid ID.');
       return;

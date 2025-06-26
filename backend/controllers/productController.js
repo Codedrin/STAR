@@ -71,3 +71,19 @@ export async function getSellerProducts(req, res, next) {
     next(err);
   }
 }
+
+//Get all the products for Buyer
+export async function getAllProducts(req, res, next) {
+  try {
+    const snap = await db
+      .collection("products")
+      .orderBy("createdAt", "desc")
+      .get();
+
+    const products = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    res.json(products);
+  } catch (err) {
+    console.error("Get All Products Error:", err);
+    next(err);
+  }
+}

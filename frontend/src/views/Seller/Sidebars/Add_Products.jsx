@@ -130,10 +130,11 @@ const Add_Products = () => {
             className="border rounded px-4 py-2"
           >
             <option value="">Select Category</option>
-            <option value="clothing">Clothing</option>
-            <option value="electronics">Electronics</option>
-            <option value="books">Books</option>
-            <option value="accessories">Accessories</option>
+            <option value="engineering">Engineering</option>
+            <option value="architecture">Architecture</option>
+            <option value="finearts">Fine Arts</option>
+            <option value="nursing">Nursing</option>
+            <option value="ict">Information and Computing Science</option>
           </select>
           <input
             type="number"

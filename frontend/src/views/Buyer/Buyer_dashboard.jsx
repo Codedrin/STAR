@@ -17,7 +17,7 @@ const Buyer_dashboard = () => {
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [profile, setProfile] = useState(null);
-
+  const [products, setProducts] = useState([]);
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
@@ -27,6 +27,13 @@ const Buyer_dashboard = () => {
         .then(data => setProfile(data));
     }
   }, [userId]);
+
+   useEffect(() => {
+    fetch('http://localhost:5000/userRoute/getAllProducts')
+      .then(res => res.json())
+      .then(data => setProducts(data))
+      .catch(err => console.error('Failed to load products', err));
+  }, []);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -127,17 +134,25 @@ const Buyer_dashboard = () => {
         </div>
       </div>
 
-      {/* Items Grid */}
+        {/* Items Grid */}
       <div className="max-w-6xl mx-auto p-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {[...Array(8)].map((_, i) => (
+        {products.map(prod => (
           <div
-            key={i}
-            onClick={() => navigate('/Buyer_description')}
+            key={prod.id}
+         onClick={() => navigate(`/Buyer_description/product/${prod.id}`, { state: { product: prod } })}
             className="bg-red-600 text-white rounded-lg p-2 cursor-pointer hover:shadow-lg transition"
           >
-            <div className="bg-black h-24 rounded mb-2"></div>
-            <p className="text-sm font-semibold">Item Description</p>
-            <p className="text-xs">₱ Price</p>
+            {prod.image_urls?.[0] ? (
+              <img
+                src={prod.image_urls[0]}
+                alt={prod.name}
+                className="h-24 w-full object-cover rounded mb-2"
+              />
+            ) : (
+              <div className="bg-black h-24 rounded mb-2"></div>
+            )}
+            <p className="text-sm font-semibold">{prod.name}</p>
+            <p className="text-xs">₱ {prod.price}</p>
           </div>
         ))}
       </div>

@@ -1,13 +1,17 @@
 import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'; // ✅ Import navigation hook
+import { useNavigate } from 'react-router-dom';
 
 const Modal_Item_Purchase = ({ onClose }) => {
-  const navigate = useNavigate(); // ✅ Initialize navigate
+  const navigate = useNavigate(); 
 
-  const handleViewOrder = () => {
-    onClose(); // Close modal first
-    navigate('/Buyer_description'); // Or change to /buyer_orders if you have that page
+    const handleViewOrder = () => {
+    onClose();
+    if (prod && prod.id) {
+      navigate(`/Buyer_description/product/${prod.id}`, { state: { product: prod } });
+    } else {
+      navigate('/Buyer_dashboard');
+    }
   };
 
   return (

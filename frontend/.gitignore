@@ -16,7 +16,9 @@ dist-ssr
 *.local
 
 # Firebase service account key
-backend/services/serviceAccountKey.json
+# in .gitignore
+/backend/services/serviceAccountKey.json
+
 
 # Editor directories and files
 .vscode/*

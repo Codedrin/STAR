@@ -8,7 +8,7 @@ import {
 } from 'react-icons/fa';
 import LogoLeft from '../../assets/Logo.png';
 import LogoRight from '../../assets/Logo2.png';
-
+import Loading from '../../components/Loading';
 import ModalChat from './Modal/Modal_chat';
 import ModalPlaceOrder from './Modal/Modal_placeorder';
 import ModalRating from './Modal/Modal_rating';
@@ -29,42 +29,37 @@ const Buyer_Description = () => {
   const [message, setMessage] = useState('Hi, Is this available ?');
   const [sending, setSending] = useState(false);
 
+  const fetchProductById = async id => {
+    setLoading(true);
+    try {
+      const res = await fetch(`http://localhost:5000/userRoute/products/${id}`);
+      if (!res.ok) throw new Error("Product fetch failed");
+      const data = await res.json();
+      setProduct(data);
+      setMainImage(data.image_urls?.[0] || '');
+    } catch (err) {
+      console.error(err);
+      navigate('/Buyer_dashboard', { replace: true });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!paramId) {
       navigate('/Buyer_dashboard', { replace: true });
-      return;
+    } else {
+      fetchProductById(paramId);
     }
-    setLoading(true);
-    fetch(`http://localhost:5000/userRoute/products/${paramId}`)
-      .then(res => {
-        if (!res.ok) throw new Error('Product not found');
-        return res.json();
-      })
-      .then(data => {
-        setProduct(data);
-        setMainImage(data.image_urls?.[0] || '');
-      })
-      .catch(() => {
-        navigate('/Buyer_dashboard', { replace: true });
-      })
-      .finally(() => setLoading(false));
   }, [paramId, navigate]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading…
-      </div>
-    );
+    return <Loading />;
+  }
+  if (!product) {
+    return <div className="min-h-screen flex items-center justify-center text-red-600">Product not found.</div>;
   }
 
-  if (!product) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-red-600">
-        Product not found.
-      </div>
-    );
-  }
 
 const handleSendMessage = async () => {
   if (!message.trim() || sending) return;
@@ -81,12 +76,11 @@ const handleSendMessage = async () => {
        text: message.trim(),  
       timestamp: Date.now(),
       type: "text",
-      // imageUrl: (optional, for image messages)
     });
 
-    // (optional) update last message meta
     const conversationMetaRef = ref(db, `chats/${conversationId}/meta`);
     await set(conversationMetaRef, {
+      participants: { [buyerId]: true, [product.sellerId]: true },
       buyerId,
       sellerId: product.sellerId,
       productId: product.id,
@@ -260,11 +254,13 @@ const handleSendMessage = async () => {
         )}
 
       {showPlaceOrderModal && product && (
-        <ModalPlaceOrder
+          <ModalPlaceOrder
           onClose={() => setShowPlaceOrderModal(false)}
-          sellerName={product.seller?.fullname || "Unknown Seller"}
-          productImage={product.image_urls?.[0] || sampleImage}
+          buyerId={buyerId}
+          sellerId={product.sellerId}
+          productId={product.id}
           productName={product.name}
+          productImage={product.image_urls?.[0]}
           productPrice={product.price}
         />
       )}
@@ -272,10 +268,14 @@ const handleSendMessage = async () => {
       {showRatingModal && (
         <ModalRating
           onClose={() => setShowRatingModal(false)}
-          productId={product.id}
+          product={product}
           buyerId={buyerId}
+          onRated={() => {
+            fetchProductById(paramId);
+          }}
         />
       )}
+
     </div>
   );
 };

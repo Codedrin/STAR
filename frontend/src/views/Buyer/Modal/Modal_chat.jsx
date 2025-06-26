@@ -28,7 +28,8 @@ const Modal_chat = ({
   sellerProfile,
   productImage
 }) => {
-  // ─── state & refs ───────────────────────────────────────────
+
+
   const [sidebarChats, setSidebarChats]   = useState([]);
   const [activeChat, setActiveChat]       = useState(null);
   const [messages, setMessages]           = useState([]);
@@ -42,57 +43,55 @@ const Modal_chat = ({
   const messagesEndRef = useRef();
   const storage        = getStorage();
 
-  // ─── 1) load & group chats by seller ────────────────────────
-  useEffect(() => {
-    if (!buyerId) return;
-    const chatsRef = dbRef(db, 'chats');
-    return onValue(chatsRef, snap => {
-      const all = snap.val() || {};
-      const sellerMap = {};
+useEffect(() => {
+  if (!buyerId) return;
+  const chatsRef = dbRef(db, 'chats');
+  return onValue(chatsRef, snap => {
+    const all = snap.val() || {};
+    const sellerMap = {};
 
-      Object.entries(all).forEach(([chatKey, c]) => {
-        // only chats where buyer participated
-        if (!c.participants?.[buyerId]) return;
+    Object.entries(all).forEach(([chatKey, c]) => {
+      const meta = c.meta || {};
+    
+      if (!meta.participants?.[buyerId]) return;
 
-        // key is already buyer_seller_product
-        const sid = c.sellerId;
-        if (!sid) return;
+      const sid = meta.sellerId;
+      if (!sid) return;
 
-        // keep only the most recent per seller
-        if (
-          !sellerMap[sid] ||
-          (c.updatedAt || 0) > (sellerMap[sid].updatedAt || 0)
-        ) {
-          sellerMap[sid] = {
-            chatId: chatKey,
-            sellerId: sid,
-            sellerName: c.sellerName,
-            sellerProfile: c.sellerProfile,
-            productId: c.productId,
-            productName: c.productName,
-            productImage: c.productImage,
-            lastMessage:
-              c.lastMessage?.text || c.lastMessage?.fileUrl
-                ? '[file]'
-                : '',
-            updatedAt: c.updatedAt || 0
-          };
-        }
-      });
-
-      const grouped = Object.values(sellerMap)
-        .sort((a, b) => b.updatedAt - a.updatedAt);
-
-      setSidebarChats(grouped);
-
-      // if opening from a product page, auto-select that chat
-      if (productId && sellerId) {
-        setActiveChat(getChatId(productId, buyerId, sellerId));
+    
+      if (!sellerMap[sid] || meta.updatedAt > sellerMap[sid].updatedAt) {
+        sellerMap[sid] = {
+          chatId: chatKey,
+          sellerId: sid,
+          sellerName: meta.sellerName,
+          sellerProfile: meta.sellerProfile,
+          productId: meta.productId,
+          productName: meta.productName,
+          productImage: meta.productImage,
+          lastMessage: meta.lastMessage?.text
+            ? meta.lastMessage.text
+            : meta.lastMessage?.fileUrl
+            ? '[file]'
+            : '',
+          updatedAt: meta.updatedAt
+        };
       }
     });
-  }, [buyerId, productId, sellerId]);
 
-  // ─── 2) load messages for active chat ───────────────────────
+    const grouped = Object.values(sellerMap)
+      .sort((a, b) => b.updatedAt - a.updatedAt);
+
+    setSidebarChats(grouped);
+
+    
+    if (productId && sellerId) {
+      setActiveChat(getChatId(productId, buyerId, sellerId));
+    }
+  });
+}, [buyerId, productId, sellerId]);
+
+
+
   useEffect(() => {
     if (!activeChat) return;
     const msgsRef = dbRef(db, `chats/${activeChat}/messages`);
@@ -104,15 +103,13 @@ const Modal_chat = ({
     });
   }, [activeChat]);
 
-  // ─── 3) auto-scroll on new messages ────────────────────────
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // ─── 4) low-level send ▲ text OR ▲ file ▲ to Firebase ──────
   const sendToFirebase = async ({ text = '', fileUrl = '', fileName = '' }) => {
     const now = Date.now();
-    // push message under messages node
     const msgRef = push(dbRef(db, `chats/${activeChat}/messages`));
     await set(msgRef, {
       senderId: buyerId,
@@ -122,7 +119,6 @@ const Modal_chat = ({
       createdAt: now
     });
 
-    // update meta for the sidebar
     await set(dbRef(db, `chats/${activeChat}/meta`), {
       participants: { [buyerId]: true, [sellerId]: true },
       productId,
@@ -136,13 +132,12 @@ const Modal_chat = ({
     });
   };
 
-  // ─── 5) unified “Send” button handler ───────────────────────
   const handleSend = async () => {
     if (sending || (!message.trim() && !pendingFile)) return;
     setSending(true);
 
     try {
-      // if there’s a file queued, upload & send it first
+ 
       if (pendingFile) {
         const path = `chats/${activeChat}/${Date.now()}_${pendingFile.name}`;
         const sRef = storageRef(storage, path);
@@ -159,20 +154,18 @@ const Modal_chat = ({
         setPendingFileUrl(null);
       }
 
-      // then send any text that remains
       if (message.trim()) {
         await sendToFirebase({ text: message.trim() });
         setMessage('');
       }
     } catch (err) {
       console.error(err);
-      // optionally show a toast/error message here
     }
 
     setSending(false);
   };
 
-  // ─── 6) file input → preview before send ───────────────────
+
   const handleFileSelect = e => {
     const f = e.target.files?.[0];
     if (!f) return;

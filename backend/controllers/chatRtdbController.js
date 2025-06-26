@@ -1,4 +1,5 @@
-import { db, admin } from "../services/firebaseAdmin.js";
+// chatRtdbController.js
+import admin, { db } from "../services/firebaseAdmin.js";
 import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
 const bucket = admin.storage().bucket();

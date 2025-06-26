@@ -2,7 +2,9 @@ import express from "express";
 import { uploadMemory } from "../utils/fileUpload.js";
 import { getAllUsersforAdmin, approveUserforAdmin, deleteUserforAdmin } from "../controllers/userController.js";
 import { addProduct, getSellerProducts, getAllProducts } from "../controllers/productController.js";
-import { getProductById, addRating } from "../controllers/productDetailsController.js";
+import { getProductById, addRating,
+  getUserById, createOrder, getReturnData, returnItem
+  } from "../controllers/productDetailsController.js";
 import {
   sendMessageRTDB,
   getUserChatsRTDB,
@@ -28,6 +30,16 @@ userRoute.get("/sellerProducts/:sellerId", getSellerProducts);
 userRoute.get("/products/:id", getProductById);
 userRoute.post("/products/:id/ratings", addRating);
 userRoute.get("/getAllProducts", getAllProducts);
+userRoute.get("/users/:id", getUserById);
+userRoute.post("/orders", createOrder);
+
+// Return Item
+userRoute.get("/returns/:productId", getReturnData);
+userRoute.post(
+  "/returns",
+  uploadMemory.single("image"),  
+  returnItem
+);
 
 //Realtime Chats
 userRoute.post("/send", sendMessageRTDB);

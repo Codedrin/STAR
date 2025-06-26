@@ -34,7 +34,10 @@ const App = () => {
         <Route path="/Buyer_dashboard" element={<BuyerDashboard />} />
         <Route path="/Buyer_description/product/:id" element={<BuyerDescription />} />
         <Route path="/Buyer_forgot" element={<BuyerForgot />} />
-        <Route path="/return-item" element={<ReturnItem />} />
+        <Route
+          path="/return-item/:productId"
+          element={<ReturnItem />}
+        />
 
         {/* Seller */}
         <Route path="/Seller_login" element={<SellerLogin />} />

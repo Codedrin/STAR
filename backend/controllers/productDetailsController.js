@@ -1,4 +1,4 @@
-import admin, { db, FieldValue } from "../services/firebaseAdmin.js";
+import admin, { db, bucket, FieldValue } from "../services/firebaseAdmin.js";
 
 export async function getProductById(req, res, next) {
   try {
@@ -72,25 +72,152 @@ export async function getProductById(req, res, next) {
 //Add rating to the product
 export async function addRating(req, res, next) {
   try {
-    console.log(req.params, req.body);
-
     const { id: productId } = req.params;
-    const { userId, score, comment = "" } = req.body;
+    const { userId, score, comment = "", reportReason } = req.body;
+
     if (!userId || score == null) {
       return res.status(400).json({ error: "Missing rating info." });
     }
 
-    const newDoc = await db.collection("ratings").add({
+    // build the payload
+    const payload = {
       productId,
       userId,
-      score: Number(score),
+      score:    Number(score),
       comment,
       createdAt: FieldValue.serverTimestamp(),
+    };
+    // only attach reportReason if the client provided one
+    if (reportReason) {
+      payload.reportReason = reportReason;
+    }
+
+    const newDoc = await db.collection("ratings").add(payload);
+
+    return res.status(201).json({
+      id: newDoc.id,
+      message: "Rating added.",
+      reportReason: payload.reportReason ?? null
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+}
+
+//Place order of the specific products of the seller
+// New: get a single user
+export async function getUserById(req, res, next) {
+  try {
+    const { id } = req.params;
+    const snap = await db.collection("users").doc(id).get();
+    if (!snap.exists) return res.status(404).json({ error: "User not found." });
+    return res.json({ id: snap.id, ...snap.data() });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+}
+
+// New: create an order
+export async function createOrder(req, res, next) {
+  try {
+    const {
+      buyerId,
+      sellerId,
+      productId,
+      productName,
+      productPrice,
+    } = req.body;
+
+    if (!buyerId || !sellerId || !productId) {
+      return res.status(400).json({ error: "Missing order info." });
+    }
+
+    const newOrder = await db.collection("orders").add({
+      buyerId,
+      sellerId,
+      productId,
+      productName,
+      productPrice,
+      createdAt: FieldValue.serverTimestamp(),
+      status: "pending",
     });
 
-    return res.json({ id: newDoc.id, message: "Rating added." });
+    return res.status(201).json({ id: newOrder.id, message: "Order placed." });
   } catch (err) {
-    console.error( err);
+    console.error(err);
+    next(err);
+  }
+}
+
+/**
+ * GET /returns/:productId
+ * Returns { id, name, price, imageUrl }
+ */
+export async function getReturnData(req, res, next) {
+  try {
+    const { productId } = req.params;
+    const snap = await db.collection("products").doc(productId).get();
+    if (!snap.exists) {
+      return res.status(404).json({ error: "Product not found." });
+    }
+    const data = snap.data();
+    // pick first image (or null)
+    const imageUrl = Array.isArray(data.image_urls) && data.image_urls.length
+      ? data.image_urls[0]
+      : null;
+
+    return res.json({
+      id:    snap.id,
+      name:  data.name,
+      price: data.price,
+      imageUrl
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+}
+
+//Return the Item
+export async function returnItem(req, res, next) {
+  try {
+    const { buyerId, productId, reason } = req.body;
+    if (!buyerId || !productId || !reason) {
+      return res.status(400).json({ error: "Missing return info." });
+    }
+    if (!req.file) {
+      return res.status(400).json({ error: "Return image is required." });
+    }
+
+    const file       = req.file; 
+    const timestamp  = Date.now();
+    const destPath   = `returns/${productId}/${timestamp}_${file.originalname}`;
+    const fileRef    = bucket.file(destPath);
+
+    await fileRef.save(file.buffer, {
+      metadata: { contentType: file.mimetype }
+    });
+    await fileRef.makePublic(); 
+    const imageUrl = fileRef.publicUrl();
+
+    const docRef = await db.collection("returns").add({
+      buyerId,
+      productId,
+      reason,
+      imageUrl,
+      createdAt: FieldValue.serverTimestamp(),
+      status:    "pending"
+    });
+
+    return res.status(201).json({
+      id:       docRef.id,
+      message:  "Return request submitted.",
+      imageUrl
+    });
+  } catch (err) {
+    console.error(err);
     next(err);
   }
 }

@@ -87,3 +87,4 @@ export async function getAllProducts(req, res, next) {
     next(err);
   }
 }
+

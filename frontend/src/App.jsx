@@ -37,12 +37,8 @@ const App = () => {
         <Route path="/Buyer_forgot" element={<BuyerForgot />} />
         <Route path="/return-item" element={<ReturnItem />} />
 
-<<<<<<< HEAD
 
         <Route path="/Seller_forgotpassword" element={<SellerForgotPassword />} />
-=======
-        {/* Seller */}
->>>>>>> e1271fcf6a093e294e64e551a48c30115b1e05b4
         <Route path="/Seller_login" element={<SellerLogin />} />
         <Route path="/Seller_register" element={<SellerRegister />} />
        <Route path="/Seller_dashboard" element={<SellerDashboard />}>
@@ -55,14 +51,7 @@ const App = () => {
           <Route path="profile" element={<Profile />} />
         </Route>
 
-<<<<<<< HEAD
         <Route path="/dashboard" element={<DashboardLayout />}>
-=======
-
-        {/* Admin */}
-   <Route path="/Admin_login" element={<Login />} />
-        <Route path="/dashboard" element={<DashboardLayout />}>      
->>>>>>> e1271fcf6a093e294e64e551a48c30115b1e05b4
           <Route index element={<AdminDashboard />} />
           <Route path="home" element={<AdminDashboard />} />
           <Route path="products" element={<AdminPro />} />

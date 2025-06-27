@@ -54,7 +54,8 @@ const Add_Products = () => {
           )}
           <label className="cursor-pointer bg-red-700 text-white px-4 py-2 rounded hover:bg-red-600">
             Add Image
-            <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+            <input type="file" 
+            accept="image/*" onChange={handleImageChange} className="hidden" />
           </label>
         </div>
 

@@ -1,32 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import LogoLeft from '../../assets/Logo.png';
-import LogoRight from '../../assets/Logo2.png';
 import { FaUserCircle, FaIdCard } from 'react-icons/fa';
+import Nav_register from './components/Nav_register'; // ✅ Import your Nav_register
 
 const Buyer_register = () => {
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Fixed Red Navbar */}
-      <div className="bg-red-700 text-white py-4 px-6 shadow-md">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <img src={LogoLeft} alt="Logo Left" className="w-20 h-20" />
-
-          <div className="text-center text-xs md:text-base">
-            <h1 className="text-xl md:text-2xl font-bold">STAR</h1>
-            <p>Welcome to Batangas State University!</p>
-            <p className="italic text-sm">
-              The Philippines’ National Engineering University
-            </p>
-          </div>
-
-          <img src={LogoRight} alt="Logo Right" className="w-20 h-20" />
-        </div>
-      </div>
+      {/* Navbar */}
+      <Nav_register />
 
       {/* Registration Card */}
       <div className="flex justify-center mt-10 px-4">
-        <div className="w-full max-w-2xl  overflow-hidden">
+        <div className="w-full max-w-2xl overflow-hidden">
           <div className="p-6">
             <h2 className="text-xl font-bold text-center mb-6">Register now!</h2>
 
@@ -62,31 +47,31 @@ const Buyer_register = () => {
             />
 
             {/* File Uploads */}
-<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-  {/* Profile Upload */}
-  <div className="flex items-center border border-gray-400 rounded overflow-hidden w-full">
-    <span className="px-3 bg-gray-100 text-gray-600 flex items-center justify-center">
-      <FaUserCircle className="text-lg" />
-    </span>
-    <span className="flex-1 px-3 text-sm text-gray-700">Profile</span>
-    <label className="px-4 py-2 bg-white text-sm cursor-pointer hover:bg-red-100 text-red-600 border-l border-gray-300">
-      Upload
-      <input type="file" className="hidden" />
-    </label>
-  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              {/* Profile Upload */}
+              <div className="flex items-center border border-gray-400 rounded overflow-hidden w-full">
+                <span className="px-3 bg-gray-100 text-gray-600 flex items-center justify-center">
+                  <FaUserCircle className="text-lg" />
+                </span>
+                <span className="flex-1 px-3 text-sm text-gray-700">Profile</span>
+                <label className="px-4 py-2 bg-white text-sm cursor-pointer hover:bg-red-100 text-red-600 border-l border-gray-300">
+                  Upload
+                  <input type="file" className="hidden" />
+                </label>
+              </div>
 
-  {/* ID Upload */}
-  <div className="flex items-center border border-gray-400 rounded overflow-hidden w-full">
-    <span className="px-3 bg-gray-100 text-gray-600 flex items-center justify-center">
-      <FaIdCard className="text-lg" />
-    </span>
-    <span className="flex-1 px-3 text-sm text-gray-700">ID</span>
-    <label className="px-4 py-2 bg-white text-sm cursor-pointer hover:bg-red-100 text-red-600 border-l border-gray-300">
-      Upload
-      <input type="file" className="hidden" />
-    </label>
-  </div>
-</div>
+              {/* ID Upload */}
+              <div className="flex items-center border border-gray-400 rounded overflow-hidden w-full">
+                <span className="px-3 bg-gray-100 text-gray-600 flex items-center justify-center">
+                  <FaIdCard className="text-lg" />
+                </span>
+                <span className="flex-1 px-3 text-sm text-gray-700">ID</span>
+                <label className="px-4 py-2 bg-white text-sm cursor-pointer hover:bg-red-100 text-red-600 border-l border-gray-300">
+                  Upload
+                  <input type="file" className="hidden" />
+                </label>
+              </div>
+            </div>
 
             {/* Agreement */}
             <div className="mb-4 text-xs text-gray-700 flex gap-2 items-start">
@@ -99,10 +84,8 @@ const Buyer_register = () => {
 
             {/* Submit Button */}
             <button className="w-40 mx-auto block bg-red-600 text-white py-2 rounded hover:bg-red-700 transition text-sm">
-            Create account
+              Create account
             </button>
-
-
 
             {/* Login Link */}
             <p className="text-sm text-center mt-4">
